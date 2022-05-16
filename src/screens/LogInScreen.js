@@ -20,9 +20,9 @@ const GET_USER_QUERY = gql`
     getUser {
       status
       user {
-        firstname
-        lastname
+        nickname
         uuid
+        id
       }
     }
   }
@@ -58,7 +58,7 @@ export default function LogInScreen({navigation}) {
       setError('Email or Password Incorrect')
     } else {
       await SecureStore.setItemAsync('AUTH', data.authentication.jwt);
-      getUser()
+      await getUser()
       dispatch(setAuthentication(true))
     }
   }
@@ -87,8 +87,12 @@ export default function LogInScreen({navigation}) {
         <Text style={styles.forgotButton}>Forgot Password?</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity onPress={() => {navigation.navigate('createAccount')}} >
+        <Text style={styles.forgotButton}>Create an Account</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity onPress={() => {authenticate({variables: {email: email, password: password}})}}>
-        <Text style={styles.loginText}>Login</Text>
+        <Text style={styles.loginButton}>Login</Text>
       </TouchableOpacity>
 
       <Text style={styles.error}>{error}</Text>
@@ -122,16 +126,9 @@ const styles = StyleSheet.create({
   },
   forgotButton: {
     height: 30,
-    marginBottom: 30
   },
   loginButton: {
-    width: "80%",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
     marginTop: 40,
-    backgroundColor: "#FF1493",
   },
   error: {
     color: '#D8000C',

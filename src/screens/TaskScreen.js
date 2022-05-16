@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux'
 import { gql, useMutation } from '@apollo/client';
-import { Snackbar } from 'react-native-paper';
 import TaskCalendar from '../components/TaskCalendar.component';
 import ResponseSnackbar from '../components/ResponseSnackbar';
 
@@ -17,8 +16,6 @@ const COMPLETE_TASK = gql`
 export default function TaskScreen({navigation}) {
   const {name, houseUser, houseTaskRecords, uuid} =  useSelector((state) => state.task.task)
 	const records =  houseTaskRecords.length > 0
-	const {timestamp} = records ? houseTaskRecords[0] : ''
-	const lastUser = records ? houseTaskRecords[0].houseUser.user : ''
 	const [snackBarMessage, setSnackBarMessage] = useState(false);
 	const [completeTask, {data, loading, error}] = useMutation(COMPLETE_TASK, {
 		onCompleted: (data) => {navigation.goBack()},
@@ -33,7 +30,7 @@ export default function TaskScreen({navigation}) {
 	return (
 		<View style={styles.container}>
 			<View style={styles.subtitleContainer}>
-				<Text style={styles.subtitle1}>{houseUser.user.firstname}'s Turn</Text>
+				<Text style={styles.subtitle1}>{houseUser.user.nickname}'s Turn</Text>
 			</View>
 			<View style={styles.calendarView}>
 				<TaskCalendar taskRecords={houseTaskRecords} />

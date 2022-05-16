@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
-export default function IconBox (props) {
+export default function IconBox ({children, onPress}) {
   return (
-    <View style={styles.container}>
-      {props.children}
-    </View>
+    <TouchableHighlight underlayColor='#b7b7b7' onPress={onPress} style={styles.container}>
+      {children}
+    </TouchableHighlight>
   );
 }
 

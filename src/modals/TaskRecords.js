@@ -25,7 +25,7 @@ const formatTimeString = (date) => {
 const RecordRow = ({ record }) => {
   return (
     <View style={styles.recordRow}>
-        <Text style={styles.recordText}>{record.houseUser.user.firstname} at {formatTimeString(record.timestamp)}</Text>
+        <Text style={styles.recordText}>{record.houseUser.user.nickname} at {formatTimeString(record.timestamp)}</Text>
     </View>
   )
 }

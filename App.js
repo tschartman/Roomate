@@ -1,8 +1,9 @@
 import { asyncMap } from "@apollo/client/utilities";
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, ApolloProvider, from } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
-import { store } from './store'
+import { persistor, store } from './store'
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react';
 import { setAuthentication } from './src/reducers/AuthenticationReducer';
 import Navigator from "./src/navigation/Navigator";
 
@@ -22,7 +23,7 @@ const authLink = new ApolloLink(async (operation, forward) => {
 const authCheckLink = new ApolloLink((operation, forward) => {
   return asyncMap(forward(operation), async (response) => {
     let data = response.data;
-    if (data[Object.keys(data)[0]].status === 403) {
+    if (data[Object.keys(data)[0]].status === 401) {
       await SecureStore.deleteItemAsync('AUTH')
       store.dispatch(setAuthentication(false))
     }
@@ -43,9 +44,11 @@ const client = new ApolloClient({
 export default function App() {
   return (
     <Provider store={store}>
-      <ApolloProvider client={client}>
-        <Navigator/>
-      </ApolloProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <ApolloProvider client={client}>
+          <Navigator/>
+        </ApolloProvider>
+      </PersistGate>
     </Provider>
   );
 }

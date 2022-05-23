@@ -7,6 +7,7 @@ import UserReducer from './src/reducers/UserReducer';
 import AuthenticationReducer from './src/reducers/AuthenticationReducer';
 import HouseReducer from './src/reducers/HouseReducer';
 import persistStore from 'redux-persist/es/persistStore';
+import RoommateReducer from './src/reducers/RoommateReducer';
 
 
 const persistConfig = {
@@ -18,7 +19,8 @@ const reducers = combineReducers({
   authentication: AuthenticationReducer,
   task: taskReducer,
   user: UserReducer,
-  house: HouseReducer
+  house: HouseReducer,
+  roommate: RoommateReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, reducers)

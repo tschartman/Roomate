@@ -13,13 +13,24 @@ import CreateHouseScreen from '../screens/CreateHouseScreen';
 import JoinHouseScreen from '../screens/JoinHouseScreen';
 import ScanHouseCodeScreen from '../screens/ScanHouseCodeScreen';
 import HouseScreen from '../screens/HouseScreen';
+import RoommateScreen from '../screens/RoommateScreen';
+import * as SecureStore from 'expo-secure-store';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setAuthentication } from '../reducers/AuthenticationReducer'
 
 function Navigator(props) {
   const Stack = createNativeStackNavigator();
   const authenticated = useSelector((state) => state.authentication.authenticated)
   const taskName = useSelector((state) => state.task.task.name)
   const [modalVisible, setModalVisible] = useState(false);
+  const dispatch = useDispatch()
+
+  const logOut = async () => {
+    await SecureStore.deleteItemAsync('AUTH')
+    dispatch(setAuthentication(false))
+  }
+
   return (
     <NavigationContainer>
     <Stack.Navigator initialRouteName='Home'>
@@ -53,8 +64,19 @@ function Navigator(props) {
           ),
         })}
         />
-        <Stack.Screen name="Task" component={TaskScreen} options={{title: taskName}} />
-        <Stack.Screen name="house" component={HouseScreen} options={{title: 'House'}} />
+        <Stack.Screen name="Task" component={TaskScreen} options={{title: taskName}}/>
+        <Stack.Screen name="house" component={HouseScreen} options={{
+          title: 'House',
+          headerRight: () => (
+            <TouchableHighlight
+              style={styles.touchableHighlight}
+              onPress={() => {logOut()}}
+              underlayColor='#ECF0F1'
+            >
+              <Ionicons name="md-log-out-outline" size={30} />
+            </TouchableHighlight>
+          )}} />
+        <Stack.Screen name="roommate" component={RoommateScreen} options={{title: 'Roommate'}} />
         <Stack.Screen name="default" component={DefaultScreen} options={{title: 'Create or Join a House'}}/>
         <Stack.Screen name="createHouse" component={CreateHouseScreen} options={{title: 'Create a new House'}}/>
         <Stack.Screen name="joinHouse" component={JoinHouseScreen} options={{title: 'Join a House'}}/>

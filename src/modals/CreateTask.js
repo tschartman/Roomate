@@ -3,8 +3,8 @@ import { View, Modal, StyleSheet, Text, TouchableOpacity, TextInput } from 'reac
 import { gql, useMutation } from '@apollo/client';
 
 const CREATE_TASK = gql`
-  mutation createTask($name: String!) {
-    createTask(name: $name) {
+  mutation createTask($name: String!, $color: String!) {
+    createTask(name: $name, color: $color) {
       status
     }
   }
@@ -19,7 +19,7 @@ function CreateTask({modalVisible, setModalVisible}) {
   });
 
   const onSumbit = () => {
-    createTask({variables: {name: taskName}})
+    createTask({variables: {name: taskName, color: '#FF5733'}})
     setModalVisible(!modalVisible)
   }
 

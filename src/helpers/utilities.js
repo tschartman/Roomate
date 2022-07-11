@@ -1,5 +1,5 @@
 export const activeTaskUser = (task, user) => {
-  if (task.houseUser.user.id === user.id) {
+  if (task.Active.User.id === user.id) {
     return true;
   }
   return false

@@ -1,6 +1,7 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
 import RoommateList from '../components/RoommateList.component';
 
 const GET_MY_HOUSE = gql`
@@ -10,15 +11,9 @@ const GET_MY_HOUSE = gql`
       house {
         name
         uuid
-        owner {
+        Roommates {
           status
-          user {
-            nickname
-          }
-        }
-        roommates {
-          status
-          user {
+          User {
             nickname
             uuid
           }
@@ -31,14 +26,15 @@ const GET_MY_HOUSE = gql`
 function HouseScreen({navigation}) {
 
   const {loading, error, data} = useQuery(GET_MY_HOUSE);
-  const roommates = data?.getMyHouse?.house?.roommates
-  const owner = data?.getMyHouse.house.owner
-
-  console.log(data)
+  const roommates = data?.getMyHouse?.house?.Roommates
+  const uuid = data?.getMyHouse?.house?.uuid
+  const user = useSelector(state => state.user.user)
 
   if (error) return <Text>Error :(</Text>;
 
   if (loading) return <Text>Loading...</Text>
+
+  console.log(data)
 
 	if (data?.getMyHouse?.status === 403) {
 		return (
@@ -46,11 +42,24 @@ function HouseScreen({navigation}) {
 				<Text>House status pending</Text>
 			</View>
 		)
-	}
+	} else if (data?.getMyHouse?.status === 404) {
+		return (
+			<View style={styles.container}>
+				<Text>You do not have a house yet :(</Text>
+			</View>
+		)
+  }
+
+
+
+  const owner = roommates.find(roomate => roomate.status === 'owner');
 
   return ( 
     <View style={styles.container}>
-      <Text style={styles.title}>{owner.user.nickname}'s House</Text>
+      <Text style={styles.title}>{owner.User.nickname}'s House</Text>
+      <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate('inviteHouse', {uuid: uuid})}}>
+        <Text style={styles.subTitle}>Invite Users</Text>
+      </TouchableOpacity>
       <RoommateList roommates={roommates} navigation={navigation} />
     </View>
   );
@@ -68,4 +77,9 @@ const styles = StyleSheet.create({
     margin: 30,
     fontSize: 30
   },
+  subTitle: {
+    margin: 20,
+    fontSize: 15,
+    color: '#007bff'
+  }
 })

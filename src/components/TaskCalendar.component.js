@@ -8,10 +8,10 @@ export default function TaskCalendar ({taskRecords}) {
   const [modalVisible, setModalVisible] = useState(false)
 
   let dates = {}
-  taskRecords.forEach(date => dates[new Date(date.timestamp).toLocaleDateString('en-CA')] = {selected: true})
+  taskRecords.forEach(date => dates[new Date(parseInt(taskRecords[0].timestamp)).toLocaleDateString('en-CA')] = {selected: true})
 
   const onDayPress = (day) => {
-    setRecords(taskRecords.filter(date => date.timestamp.substring(0, 10) === day.dateString))
+    setRecords(taskRecords.filter(date => new Date(parseInt(date.timestamp)).toISOString().substring(0, 10) === day.dateString))
     setModalVisible(true)
   }
 

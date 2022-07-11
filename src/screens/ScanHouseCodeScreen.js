@@ -1,26 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { gql, useLazyQuery } from '@apollo/client';
 import { Camera } from 'expo-camera';
-import { setSearchedHouse } from '../reducers/HouseReducer';
 import { useDispatch } from 'react-redux';
-
-const GET_HOUSE_QUERY = gql`
-query getHouse($houseUUID: String!) {
-  getHouse(houseUUID: $houseUUID) {
-    status
-    house {
-      name
-      uuid
-      owner {
-        user {
-          nickname
-        }
-      }
-    }
-  }
-}
-`
 
 function ScanHouseCodeScreen({navigation, route}) {
   const dispatch = useDispatch();

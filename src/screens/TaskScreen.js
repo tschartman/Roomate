@@ -14,12 +14,11 @@ const COMPLETE_TASK = gql`
 `
 
 export default function TaskScreen({navigation}) {
-  const {name, houseUser, houseTaskRecords, uuid} =  useSelector((state) => state.task.task)
-	const records =  houseTaskRecords.length > 0
+  const {name, Active, Records, uuid} =  useSelector((state) => state.task.task)
 	const [snackBarMessage, setSnackBarMessage] = useState(false);
 	const [completeTask, {data, loading, error}] = useMutation(COMPLETE_TASK, {
 		onCompleted: (data) => {navigation.goBack()},
-    onError: (data) => setSnackBarMessage('Error Completing Task'),
+    onError: (data) => console.log(data),
     refetchQueries: ['getTasks']
 	})
 
@@ -30,10 +29,10 @@ export default function TaskScreen({navigation}) {
 	return (
 		<View style={styles.container}>
 			<View style={styles.subtitleContainer}>
-				<Text style={styles.subtitle1}>{houseUser.user.nickname}'s Turn</Text>
+				<Text style={styles.subtitle1}>{Active.User.nickname}'s Turn</Text>
 			</View>
 			<View style={styles.calendarView}>
-				<TaskCalendar taskRecords={houseTaskRecords} />
+				<TaskCalendar taskRecords={Records} />
 			</View>
 			<View style={styles.actions}>
 					<TouchableOpacity

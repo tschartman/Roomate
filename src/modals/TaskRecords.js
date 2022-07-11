@@ -25,7 +25,7 @@ const formatTimeString = (date) => {
 const RecordRow = ({ record }) => {
   return (
     <View style={styles.recordRow}>
-        <Text style={styles.recordText}>{record.houseUser.user.nickname} at {formatTimeString(record.timestamp)}</Text>
+        <Text style={styles.recordText}>{record.HouseUser.User.nickname} at {formatTimeString(new Date(parseInt(record.timestamp)).toISOString())}</Text>
     </View>
   )
 }
@@ -47,7 +47,7 @@ function TaskRecords({modalVisible, setModalVisible, records}) {
   >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.title}>{formatDateString(records?.[0]?.timestamp)}</Text>
+          <Text style={styles.title}>{records.length > 0 && formatDateString(new Date(parseInt(records?.[0]?.timestamp)).toISOString())}</Text>
           <FlatList 
             style={styles.flatlist}
             data={records}

@@ -16,17 +16,17 @@ const GET_TASKS = gql`
 					name
 					color
 					uuid
-					houseUser {
-						user {
+					Active {
+						User {
 							nickname
 							id
 						}
 					}
-					houseTaskRecords {
+					Records {
 						timestamp
 						uuid
-						houseUser {
-							user {
+						HouseUser {
+							User {
 								nickname
 								id
 							}
